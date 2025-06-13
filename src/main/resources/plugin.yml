@@ -1,0 +1,11 @@
+name: AfkMagic
+version: '${project.version}'
+main: me.loovcik.afkmagic.AFKMagic
+api-version: '1.21'
+prefix: AFKMagic
+authors: [Loovcik]
+softdepend:
+    - PlaceholderAPI
+    - WorldGuard
+    - EssentialsX
+    - ProtocolLib
