@@ -1,2 +1,13 @@
 # Project exclude paths
 /target/
+/.idea/.gitignore
+/AfkMagic.iml
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/compiler.xml
+/dependency-reduced-pom.xml
+/.idea/encodings.xml
+/.idea/jarRepositories.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/uiDesigner.xml
+/.idea/vcs.xml
