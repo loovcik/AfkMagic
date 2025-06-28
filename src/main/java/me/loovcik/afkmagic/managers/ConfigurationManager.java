@@ -609,7 +609,7 @@ public class ConfigurationManager extends me.loovcik.core.managers.Configuration
 	}
 
 	@Override
-	public String getHeader() {
+	public String header() {
 		List<String> title = new ArrayList<>();
 		title.add("""
 				
