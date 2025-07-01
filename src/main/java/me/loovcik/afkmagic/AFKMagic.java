@@ -1,6 +1,7 @@
 package me.loovcik.afkmagic;
 
 import lombok.Getter;
+import me.loovcik.afkmagic.database.SQLite;
 import me.loovcik.afkmagic.managers.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -58,6 +59,11 @@ public final class AFKMagic extends JavaPlugin {
     public ActionsManager actions;
 
     /**
+     * Zarządza połączeniem z bazą danych
+     */
+    public SQLite database;
+
+    /**
      * Zapewnia obsługę wątków
      */
     public Tasks tasks;
@@ -74,6 +80,7 @@ public final class AFKMagic extends JavaPlugin {
 
         saveDefaultConfig();
 
+        database = new SQLite(this);
         tasks = new Tasks();
         dependencies = new DependenciesManager(this);
         commandManager = new CommandManager(this);
@@ -111,6 +118,7 @@ public final class AFKMagic extends JavaPlugin {
         listeners.getAFKMachineDetectionTask().cancel();
         actions.unregisterAll();
         unregisterCommands();
+        database.closeConnection();
         getLogger().info("Plugin successfully disabled");
     }
 

@@ -22,6 +22,10 @@ import me.loovcik.core.ChatHelper;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -252,19 +256,22 @@ public final class AFKPlayer implements IAFKPlayer
 	public void load() {
 		try
 		{
-			File f = new File(AFKMagic.getInstance().getDataFolder(), "statistics/"+getUniqueId()+".yml");
-			if (!f.exists())
-			{
+			Connection connection = plugin.database.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM stats WHERE uuid=? LIMIT 1");
+			preparedStatement.setString(1, uuid.toString());
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				totalAfkTime = resultSet.getLong("totalAfkTime");
+				kickCount = resultSet.getInt("totalKicks");
+				altsKickedCount = resultSet.getInt("altsKicks");
+				altsDetectedCount = resultSet.getInt("altsDetections");
+			}
+			else {
 				totalAfkTime = 0L;
 				kickCount = 0;
-				altsKickedCount = 0;
 				altsDetectedCount = 0;
+				altsKickedCount = 0;
 			}
-			YamlConfiguration statistics = YamlConfiguration.loadConfiguration(f);
-			totalAfkTime = statistics.getLong(getUniqueId() + ".totalAFKTime", 0L);
-			kickCount = statistics.getInt(getUniqueId() + ".totalKicks", 0);
-			altsKickedCount = statistics.getInt(getUniqueId() + ".altsKicks", 0);
-			altsDetectedCount = statistics.getInt(getUniqueId() + ".altsTotalDetects", 0);
 
 			changed = false;
 			if (plugin.configuration.global.debug)
@@ -290,33 +297,29 @@ public final class AFKPlayer implements IAFKPlayer
 		if (totalAfkTime == 0 && kickCount == 0 && altsKickedCount == 0 && altsDetectedCount == 0)
 			return;
 
-		File f = new File(AFKMagic.getInstance().getDataFolder(), "statistics/"+getUniqueId()+".yml");
-		if (!f.exists()){
-			try{
-				if (!f.createNewFile())
-					ChatHelper.console("&cFailed to create file "+f.getName());
-			}
-			catch (IOException e){
-				ChatHelper.console("&cFailed to create file "+f.getName());
-			}
-		}
+		try {
+			Connection connection = plugin.database.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement("INSERT OR IGNORE INTO stats (uuid, userName) VALUES (?, ?)");
+			preparedStatement.setString(1, uuid.toString());
+			preparedStatement.setString(2, name);
+			preparedStatement.executeUpdate();
 
-		YamlConfiguration statistics = YamlConfiguration.loadConfiguration(f);
-		statistics.set(getUniqueId() + ".totalAFKTime", totalAfkTime);
-		statistics.set(getUniqueId() + ".totalKicks", kickCount);
-		statistics.set(getUniqueId() + ".altsKicks", altsKickedCount);
-		statistics.set(getUniqueId() + ".altsTotalDetects", altsDetectedCount);
-		statistics.set(getUniqueId() + ".name", getName());
+			preparedStatement = connection.prepareStatement("UPDATE stats SET totalAfkTime=?, totalKicks=?, altsKicks=?, altsDetections=? WHERE uuid=?");
+			preparedStatement.setLong(1, totalAfkTime);
+			preparedStatement.setInt(2, kickCount);
+			preparedStatement.setInt(3, altsKickedCount);
+			preparedStatement.setInt(4, altsDetectedCount);
+			preparedStatement.setString(5, uuid.toString());
+			preparedStatement.executeUpdate();
 
-		try
-		{
-			statistics.save(f);
 			changed = false;
 			if (plugin.configuration.global.debug)
 				ChatHelper.console(getName()+" data <green>saved</green>");
+
 		}
-		catch (IOException e){
+		catch (SQLException e) {
 			ChatHelper.console("&cUnable to save player data for "+getName());
+			e.printStackTrace();
 		}
 	}
 
