@@ -81,24 +81,32 @@ public class Placeholders extends PlaceholderExpansion
 						case "afk" -> {
 							if (parts.size() > 2 && parts.get(2).equalsIgnoreCase("text"))
 								yield Time.ofMillis(afkPlayer.getTotalAfkTime()).format(true);
+							else if (parts.size() > 2 && parts.get(2).equalsIgnoreCase("hours"))
+								yield Time.ofSeconds(afkPlayer.getTotalAfkTime()).formatSimple();
 							else
 								yield afkPlayer.getTotalAfkTime().toString();
 						}
 						case "idle" -> {
 							if (parts.size() > 2 && parts.get(2).equalsIgnoreCase("text"))
 								yield Time.ofMillis(afkPlayer.getIdleTime()).format(true);
+							else if (parts.size() > 2 && parts.get(2).equalsIgnoreCase("hours"))
+								yield Time.ofSeconds(afkPlayer.getIdleTime()).formatSimple();
 							else
 								yield afkPlayer.getIdleTime().toString();
 						}
 						case "current" -> {
 							if (parts.size() > 2 && parts.get(2).equalsIgnoreCase("text"))
 								yield Time.ofMillis(afkPlayer.getCurrentAfkTime()).format(true);
+							else if (parts.size() > 2 && parts.get(2).equalsIgnoreCase("hours"))
+								yield Time.ofSeconds(afkPlayer.getCurrentAfkTime()).formatSimple();
 							else
 								yield afkPlayer.getCurrentAfkTime().toString();
 						}
 						case "game" -> {
 							if (parts.size() > 2 && parts.get(2).equalsIgnoreCase("text"))
 								yield Time.ofSeconds(afkPlayer.getGameTime()).format(true);
+							else if (parts.size() > 2 && parts.get(2).equalsIgnoreCase("hours"))
+								yield Time.ofSeconds(afkPlayer.getGameTime()).formatSimple();
 							else
 								yield afkPlayer.getGameTime().toString();
 						}
