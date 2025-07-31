@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
@@ -19,8 +18,6 @@ import me.loovcik.afkmagic.utils.Others;
 import me.loovcik.core.types.Time;
 import me.loovcik.core.ChatHelper;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,7 +43,7 @@ public final class AFKPlayer implements IAFKPlayer
 	@Getter	private Long startAfkDate = 0L;
 	@Getter private Long stopAfkDate = 0L;
 	@Getter@Setter private Long currentAfkTime = 0L;
-	@Getter@Setter private Long totalAfkTime = 0L;
+	@Setter private Long totalAfkTime = 0L;
 
 	@Getter@Setter private Long startAfkRoomDate = -1L;
 	@Getter@Setter private boolean isInsideAfkRoom = false;
@@ -91,6 +88,7 @@ public final class AFKPlayer implements IAFKPlayer
 	}
 
 	public Long getIdleTime() { return System.currentTimeMillis() - lastActivity; }
+	@Override public Long getTotalAfkTime() { return this.totalAfkTime; }
 
 	/** Przełącza gracza w stan AFK */
 	public void startAFK()

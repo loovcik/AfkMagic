@@ -24,4 +24,6 @@ public interface IAFKPlayer
 	/** Konwertuje klasę AFKPlayer na klasę Bukkit Player */
 	Player getPlayer();
 
+	/** Zwraca całkowity czas AFK gracza, w sekundach */
+	Long getTotalAfkTime();
 }
