@@ -1,5 +1,6 @@
 package me.loovcik.afkmagic.dependencies;
 
+import me.loovcik.afkmagic.placeholders.ExtraPlaceholders;
 import me.loovcik.core.ChatHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -7,6 +8,7 @@ import org.bukkit.OfflinePlayer;
 import me.loovcik.afkmagic.AFKMagic;
 import me.loovcik.afkmagic.placeholders.Placeholders;
 
+@SuppressWarnings("UnstableApiUsage")
 public class PlaceholderAPI
 {
 	private PlaceholderAPIHook hook;
@@ -23,17 +25,23 @@ public class PlaceholderAPI
 	}
 
 	public void register(){
-		if (isEnabled()) hook.placeholders.register();
+		if (isEnabled()) {
+			hook.placeholders.register();
+			hook.extra.register();
+		}
 	}
 
 	public void unregister(){
-		if (isEnabled()) hook.placeholders.unregister();
+		if (isEnabled()) {
+			hook.placeholders.unregister();
+			hook.extra.unregister();
+		}
 	}
 
 	public PlaceholderAPI(AFKMagic plugin){
 		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null && Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
 			hook = new PlaceholderAPIHook(plugin);
-			ChatHelper.console("PlaceholderAPI support: <green>Yes</green> ("+ Bukkit.getPluginManager().getPlugin("PlaceholderAPI").getDescription().getVersion() + ")");
+			ChatHelper.console("PlaceholderAPI support: <green>Yes</green> ("+ Bukkit.getPluginManager().getPlugin("PlaceholderAPI").getPluginMeta().getVersion() + ")");
 		}
 		else ChatHelper.console("PlaceholderAPI support: <red>No</red>");
 	}
@@ -42,11 +50,11 @@ public class PlaceholderAPI
 @SuppressWarnings("UnstableApiUsage")
 class PlaceholderAPIHook {
 	public final Placeholders placeholders;
+	public final ExtraPlaceholders extra;
+
 	public String getVersion(){
 		return Bukkit.getPluginManager().getPlugin("PlaceholderAPI").getPluginMeta().getVersion();
 	}
-
-
 
 	public String process(OfflinePlayer op, String input){
 		return me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(op, input);
@@ -54,5 +62,6 @@ class PlaceholderAPIHook {
 
 	public PlaceholderAPIHook(AFKMagic plugin){
 		placeholders = new Placeholders(plugin);
+		extra = new ExtraPlaceholders(plugin);
 	}
 }

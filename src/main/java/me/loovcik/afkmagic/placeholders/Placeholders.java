@@ -14,6 +14,7 @@ import java.util.List;
 /**
  * Zapewnia obsługę PlaceholderAPI w pluginie
  */
+@SuppressWarnings("UnstableApiUsage")
 public class Placeholders extends PlaceholderExpansion
 {
 	private final AFKMagic plugin;
@@ -39,7 +40,7 @@ public class Placeholders extends PlaceholderExpansion
 	@Override
 	public @NotNull String getAuthor()
 	{
-		return String.join(", ", plugin.getDescription().getAuthors());
+		return String.join(", ", plugin.getPluginMeta().getAuthors());
 	}
 
 	/**
@@ -49,7 +50,7 @@ public class Placeholders extends PlaceholderExpansion
 	@Override
 	public @NotNull String getVersion()
 	{
-		return plugin.getDescription().getVersion();
+		return plugin.getPluginMeta().getVersion();
 	}
 
 	@Override
