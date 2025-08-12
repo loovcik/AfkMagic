@@ -585,7 +585,7 @@ public class AFKMagicListeners implements Listener
 		if (isBumpProtected && movement.isMoving && !movement.isLooking){
 			if (movement.to.getY() <= movement.from.getY()) {
 				e.setCancelled(true);
-				if (plugin.configuration.global.logToConsole || plugin.configuration.global.debug)
+				if (plugin.configuration.global.debug)
 					ChatHelper.console("<gold>Prevent to move player "+AFKPlayer.get(e.getPlayer().getUniqueId())+", because is AFK</gold>");
 			}
 		}
@@ -603,12 +603,12 @@ public class AFKMagicListeners implements Listener
 		if (e.getEntity() instanceof Player player && AFKPlayer.get(player.getUniqueId()).isAFK()){
 			if (plugin.configuration.afk.protect.hurt.players && damageCausedByPlayer) {
 				e.setCancelled(true);
-				if (plugin.configuration.global.logToConsole || plugin.configuration.global.debug)
+				if (plugin.configuration.global.debug)
 					ChatHelper.console("<gold>Prevent damage "+player.getName()+" from "+damageCausedByPlayer+"</gold>");
 			}
 			if (plugin.configuration.afk.protect.hurt.others && !damageCausedByPlayer) {
 				e.setCancelled(true);
-				if (plugin.configuration.global.logToConsole || plugin.configuration.global.debug)
+				if (plugin.configuration.global.debug)
 					ChatHelper.console("<gold>Prevent damage "+player.getName()+" from "+damageCausedByPlayer+"</gold>");
 			}
 		}
@@ -668,7 +668,7 @@ public class AFKMagicListeners implements Listener
 		if (!AFKPlayer.get(player.getUniqueId()).isAFK())
 			return;
 		e.setCancelled(true);
-		if (plugin.configuration.global.logToConsole || plugin.configuration.global.debug)
+		if (plugin.configuration.global.debug)
 			ChatHelper.console("<gold>Prevent mob "+e.getEntity().getName()+" targeting to "+e.getTarget().getName()+"</gold>");
 	}
 
@@ -681,7 +681,7 @@ public class AFKMagicListeners implements Listener
 			if (AFKPlayer.get(player.getUniqueId()).isAFK())
 				if (plugin.configuration.afk.protect.pickup) {
 					e.setCancelled(true);
-					if (plugin.configuration.global.logToConsole || plugin.configuration.global.debug)
+					if (plugin.configuration.global.debug)
 						ChatHelper.console("<gold>Prevent player "+player.getName()+" from pickup item "+e.getItem().getName()+"</gold>");
 				}
 	}
